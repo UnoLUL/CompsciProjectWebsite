@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Data Visualizer - Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
+            background: #0a0a0a;
+            overflow: hidden;
+            color: #ffffff;
+        }
+        
+        /* Presentation Container */
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* Slide Base Styles */
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            background: #1a1a1a;
+            padding: 60px 80px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide.prev {
+            display: flex;
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+        
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+            background: #2d2d30;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid #4a4a4a;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-btn {
+            background: #4a9eff;
+            color: #1a1a1a;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .nav-btn:hover {
+            background: #5fa8ff;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            background: #4a4a4a;
+            color: #808080;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .slide-counter {
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            color: #b0b0b0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .slide-counter .current {
+            color: #4a9eff;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #2d2d30;
+            z-index: 1001;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a9eff, #ff6b35);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(74, 158, 255, 0.5);
+        }
+        
+        /* Slide Layouts */
+        .slide-title {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .slide-content {
+            flex-direction: column;
+        }
+        
+        .slide-split {
+            flex-direction: row;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        /* Typography */
+        h1 {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #ffffff 0%, #4a9eff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(10deg); }
+        }
+        
+        h2 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        
+        h3 {
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: #4a9eff;
+        }
+        
+        .subtitle {
+            font-size: 28px;
+            font-weight: 300;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+        }
+        
+        p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        /* Components */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: #2d2d30;
+            border: 1px solid #4a4a4a;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #4a9eff;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(74, 158, 255, 0.2);
+            border-color: #4a9eff;
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #4a9eff, #ff6b35);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            background: #2d2d30;
+            border: 1px solid #4a4a4a;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #4a9eff;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .code-block {
+            background: #2d2d30;
+            border: 1px solid #4a4a4a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 16px;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            color: #4a9eff;
+        }
+        
+        .tech-stack {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .tech-badge {
+            background: #2d2d30;
+            border: 1px solid #4a9eff;
+            color: #4a9eff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-badge:hover {
+            background: #4a9eff;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+        
+        .screenshot {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 12px;
+            border: 2px solid #4a4a4a;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .demo-container {
+            background: #2d2d30;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid #4a4a4a;
+        }
+        
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .bullet-list li {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            padding-left: 40px;
+            position: relative;
+            color: #e0e0e0;
+        }
+        
+        .bullet-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 10px;
+            color: #4a9eff;
+            font-size: 24px;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slide.active .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .slide.active .animate-in:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .animate-in:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .animate-in:nth-child(3) { animation-delay: 0.3s; }
+        .slide.active .animate-in:nth-child(4) { animation-delay: 0.4s; }
+        
+        /* Keyboard Hint */
+        .keyboard-hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d2d30;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #4a4a4a;
+            color: #b0b0b0;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        
+        .key {
+            background: #1a1a1a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #4a4a4a;
+            margin: 0 2px;
+            color: #4a9eff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+    </div>
+    
+    <!-- Keyboard Hint -->
+    <div class="keyboard-hint">
+        Use <span class="key">←</span> <span class="key">→</span> or <span class="key">Space</span> to navigate
+    </div>
+    
+    <!-- Presentation -->
+    <div class="presentation">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide slide-title active">
+            <h1 class="animate-in">Climate Data Visualizer</h1>
+            <p class="subtitle animate-in">Interactive CO₂ Emissions Analysis Platform</p>
+            <div class="tech-stack animate-in">
+                <span class="tech-badge">JavaFX</span>
+                <span class="tech-badge">Data Visualization</span>
+                <span class="tech-badge">Real-time Analytics</span>
+                <span class="tech-badge">Cross-platform</span>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Problem Statement -->
+        <div class="slide slide-content">
+            <h2 class="animate-in">The Challenge</h2>
+            <p class="subtitle animate-in">Understanding Global Emissions Data</p>
+            <div class="feature-grid animate-in">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Complex Data</h3>
+                    <p>20,000+ data points spanning 275 years across 195 countries</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Limited Tools</h3>
+                    <p>Existing solutions lack real-time filtering and comparison</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Performance</h3>
+                    <p>Need for smooth, responsive visualization at 60fps</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Accessibility</h3>
+                    <p>Platform-independent solution with intuitive UI</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Solution Overview -->
+        <div class="slide slide-content">
+            <h2 class="animate-in">The Solution</h2>
+            <p class="subtitle animate-in">A Modern, Efficient Data Visualization Tool</p>
+            <ul class="bullet-list animate-in">
+                <li>Real-time data processing with intelligent caching</li>
+                <li>Interactive dual-country comparison system</li>
+                <li>Dynamic year range filtering (1750-2025)</li>
+                <li>Statistical analysis with median, mean, and standard deviation</li>
+                <li>Cross-platform executables with bundled Java runtime</li>
+            </ul>
+            <div class="stats-container animate-in">
+                <div class="stat-box">
+                    <div class="stat-number">~50MB</div>
+                    <div class="stat-label">Package Size</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">60fps</div>
+                    <div class="stat-label">Performance</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">195</div>
+                    <div class="stat-label">Countries</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Technical Architecture -->
+        <div class="slide slide-content">
+            <h2 class="animate-in">Technical Architecture</h2>
+            <p class="subtitle animate-in">Clean, Modular Design</p>
+            <div class="code-block animate-in">
+                <code>
+/data<br>
+├── DataLoader.java     // CSV parsing & data management<br>
+├── DataRecord.java     // Data model (Country, Year, Emission)<br>
+└── DataAnalyser.java   // Statistical computations<br>
+<br>
+/ui<br>
+└── MainApp.java        // JavaFX UI & visualization logic
+                </code>
+            </div>
+            <div class="feature-grid animate-in">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Custom Dark Theme</h3>
+                    <p>CSS-styled components with smooth animations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Performance Optimization</h3>
+                    <p>Smart caching for statistics and filtered data</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Key Features -->
+        <div class="slide slide-content">
+            <h2 class="animate-in">Key Features</h2>
+            <div class="demo-container animate-in">
+                <h3>🔍 Smart Search</h3>
+                <p>Real-time country filtering with searchable dropdowns</p>
+            </div>
+            <div class="demo-container animate-in">
+                <h3>📊 Interactive Charts</h3>
+                <p>Hover tooltips, smooth animations, dual-country overlay</p>
+            </div>
+            <div class="demo-container animate-in">
+                <h3>📈 Live Statistics</h3>
+                <p>Mean, median, standard deviation, and trend analysis</p>
+            </div>
+            <div class="demo-container animate-in">
+                <h3>💾 Export Capability</h3>
+                <p>Save charts as PNG with automatic naming</p>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Performance -->
+        <div class="slide slide-content">
+            <h2 class="animate-in">Performance Metrics</h2>
+            <p class="subtitle animate-in">Optimized for Large Datasets</p>
+            <div class="stats-container animate-in">
+                <div class="stat-box">
+                    <div class="stat-number">&lt;2s</div>
+                    <div class="stat-label">Load Time</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3x</div>
+                    <div class="stat-label">Faster with Cache</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">20K+</div>
+                    <div class="stat-label">Data Points</div>
+                </div>
+            </div>
+            <ul class="bullet-list animate-in">
+                <li>Async data loading with progress feedback</li>
+                <li>HashMap-based caching for repeated calculations</li>
+                <li>Optimized stream operations for data filtering</li>
+                <li>Smooth 60fps animations with JavaFX transitions</li>
+            </ul>
+        </div>
+        
+        <!-- Slide 7: Results -->
+        <div class="slide slide-content">
+            <h2 class="animate-in">Impact & Results</h2>
+            <div class="feature-grid animate-in">
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Cross-Platform Success</h3>
+                    <p>Windows, macOS, and Linux support with native feel</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>User-Friendly</h3>
+                    <p>No installation required - just extract and run</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Modern UI/UX</h3>
+                    <p>Professional dark theme with intuitive controls</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Educational Value</h3>
+                    <p>Makes climate data accessible and understandable</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Future Enhancements -->
+        <div class="slide slide-content">
+            <h2 class="animate-in">Future Enhancements</h2>
+            <p class="subtitle animate-in">Roadmap for Version 2.0</p>
+            <ul class="bullet-list animate-in">
+                <li>Additional chart types (bar, pie, heatmap)</li>
+                <li>Multi-country comparison (3+ countries)</li>
+                <li>Data prediction using linear regression</li>
+                <li>CSV export with filtered data</li>
+                <li>Real-time data source integration</li>
+                <li>Mobile companion app</li>
+            </ul>
+        </div>
+        
+        <!-- Slide 9: Thank You -->
+        <div class="slide slide-title">
+            <h1 class="animate-in">Thank You</h1>
+            <p class="subtitle animate-in">Questions & Discussion</p>
+            <div class="tech-stack animate-in">
+                <span class="tech-badge">GitHub: /climate-visualizer</span>
+                <span class="tech-badge">Download Available</span>
+                <span class="tech-badge">Open Source</span>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <div class="slide-counter">
+            <span class="current" id="currentSlide">1</span>
+            <span> / </span>
+            <span id="totalSlides">9</span>
+        </div>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+    
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+        
+        function showSlide(index) {
+            // Remove all active and prev classes
+            slides.forEach(slide => {
+                slide.classList.remove('active', 'prev');
+            });
+            
+            // Set previous slide
+            if (currentSlideIndex >= 0 && currentSlideIndex < totalSlides) {
+                slides[currentSlideIndex].classList.add('prev');
+            }
+            
+            // Set new active slide
+            currentSlideIndex = index;
+            slides[currentSlideIndex].classList.add('active');
+            
+            // Update counter
+            document.getElementById('currentSlide').textContent = currentSlideIndex + 1;
+            
+            // Update progress bar
+            const progress = ((currentSlideIndex + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Update navigation buttons
+            document.querySelector('.nav-btn').disabled = currentSlideIndex === 0;
+            document.querySelectorAll('.nav-btn')[1].disabled = currentSlideIndex === totalSlides - 1;
+        }
+        
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides - 1) {
+                showSlide(currentSlideIndex + 1);
+            }
+        }
+        
+        function previousSlide() {
+            if (currentSlideIndex > 0) {
+                showSlide(currentSlideIndex - 1);
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+        
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + 50) {
+                previousSlide();
+            }
+        }
+        
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
