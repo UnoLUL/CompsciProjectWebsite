@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Climate Data Visualiser - Presentation</title>
     <style>
+        /* Professional presentation design inspired by modern terminal aesthetics */
         * {
             margin: 0;
             padding: 0;
@@ -13,9 +14,12 @@
         
         body {
             font-family: 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
-            background: #0a0a0a;
+            background: #000000;
             overflow: hidden;
             color: #ffffff;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(74, 158, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(74, 158, 255, 0.03) 0%, transparent 50%);
         }
         
         /* Presentation Container */
@@ -33,7 +37,11 @@
             top: 0;
             left: 0;
             display: flex;
-            background: #1a1a1a;
+            background: #0a0a0a;
+            background-image: 
+                linear-gradient(rgba(74, 158, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(74, 158, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             padding: 60px 80px;
             visibility: hidden;
             opacity: 0;
@@ -63,17 +71,18 @@
             display: flex;
             gap: 20px;
             z-index: 1000;
-            background: #2d2d30;
+            background: rgba(13, 13, 13, 0.8);
             padding: 12px 20px;
             border-radius: 12px;
-            border: 1px solid #4a4a4a;
+            border: 1px solid rgba(74, 158, 255, 0.2);
+            backdrop-filter: blur(10px);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
         
         .nav-btn {
-            background: #4a9eff;
-            color: #1a1a1a;
-            border: none;
+            background: rgba(74, 158, 255, 0.1);
+            color: #4a9eff;
+            border: 1px solid rgba(74, 158, 255, 0.3);
             padding: 8px 16px;
             border-radius: 6px;
             font-weight: 600;
@@ -83,13 +92,16 @@
         }
         
         .nav-btn:hover {
-            background: #5fa8ff;
+            background: rgba(74, 158, 255, 0.2);
+            color: #ffffff;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
         }
         
         .nav-btn:disabled {
-            background: #4a4a4a;
-            color: #808080;
+            background: rgba(40, 40, 40, 0.5);
+            color: #505050;
+            border-color: rgba(80, 80, 80, 0.3);
             cursor: not-allowed;
             transform: none;
         }
@@ -98,13 +110,14 @@
             display: flex;
             align-items: center;
             padding: 0 16px;
-            color: #b0b0b0;
+            color: #606060;
             font-size: 14px;
             font-weight: 500;
+            font-family: 'Monaco', 'Consolas', monospace;
         }
         
         .slide-counter .current {
-            color: #4a9eff;
+            color: #60a5fa;
             font-weight: 600;
             font-size: 16px;
         }
@@ -115,16 +128,16 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
-            background: #2d2d30;
+            height: 2px;
+            background: rgba(13, 13, 13, 0.8);
             z-index: 1001;
         }
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4a9eff, #ff6b35);
+            background: linear-gradient(90deg, #2563eb, #4a9eff, #60a5fa);
             transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(74, 158, 255, 0.5);
+            box-shadow: 0 0 20px rgba(74, 158, 255, 0.4);
         }
         
         /* Slide Layouts */
@@ -156,16 +169,19 @@
             font-weight: 700;
             margin-bottom: 30px;
             letter-spacing: -2px;
-            background: linear-gradient(135deg, #ffffff 0%, #4a9eff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease infinite;
+            color: #ffffff;
+            position: relative;
         }
         
-        @keyframes gradientShift {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(10deg); }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4a9eff, transparent);
         }
         
         h2 {
@@ -176,17 +192,19 @@
         }
         
         h3 {
-            font-size: 32px;
-            font-weight: 500;
+            font-size: 28px;
+            font-weight: 600;
             margin-bottom: 16px;
-            color: #4a9eff;
+            color: #60a5fa;
+            letter-spacing: -0.5px;
         }
         
         .subtitle {
             font-size: 28px;
             font-weight: 300;
-            color: #b0b0b0;
+            color: #808080;
             margin-bottom: 40px;
+            letter-spacing: 0.5px;
         }
         
         p {
@@ -205,8 +223,8 @@
         }
         
         .feature-card {
-            background: #2d2d30;
-            border: 1px solid #4a4a4a;
+            background: rgba(13, 13, 13, 0.8);
+            border: 1px solid rgba(74, 158, 255, 0.1);
             border-radius: 12px;
             padding: 30px;
             transition: all 0.3s ease;
@@ -214,6 +232,7 @@
             overflow: hidden;
             opacity: 0;
             transform: translateY(20px);
+            backdrop-filter: blur(10px);
         }
         
         .feature-card::before {
@@ -223,7 +242,7 @@
             left: 0;
             width: 4px;
             height: 100%;
-            background: #4a9eff;
+            background: linear-gradient(180deg, transparent, #4a9eff, transparent);
             transform: scaleY(0);
             transition: transform 0.3s ease;
         }
@@ -234,24 +253,44 @@
         
         .feature-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(74, 158, 255, 0.2);
-            border-color: #4a9eff;
+            border-color: rgba(74, 158, 255, 0.3);
+            background: rgba(13, 13, 13, 0.95);
+            box-shadow: 
+                0 0 30px rgba(74, 158, 255, 0.1),
+                inset 0 0 30px rgba(74, 158, 255, 0.02);
         }
-        
-
-
-
         
         .feature-icon {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, #4a9eff, #ff6b35);
+            background: rgba(74, 158, 255, 0.1);
+            border: 1px solid rgba(74, 158, 255, 0.3);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(74, 158, 255, 0.1));
+        }
+        
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: #4a9eff;
+            stroke-width: 2;
+            fill: none;
+            z-index: 1;
         }
         
         .stats-container {
@@ -262,20 +301,39 @@
         
         .stat-box {
             flex: 1;
-            background: #2d2d30;
-            border: 1px solid #4a4a4a;
+            background: rgba(13, 13, 13, 0.8);
+            border: 1px solid rgba(74, 158, 255, 0.1);
             border-radius: 12px;
             padding: 24px;
             text-align: center;
             opacity: 0;
             transform: translateY(20px);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+        
+        .stat-box::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4a9eff, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .stat-box:hover::after {
+            opacity: 1;
         }
         
         .stat-number {
             font-size: 48px;
             font-weight: 700;
-            color: #4a9eff;
+            color: #60a5fa;
             margin-bottom: 8px;
+            text-shadow: 0 0 30px rgba(74, 158, 255, 0.3);
         }
         
         .stat-label {
@@ -286,18 +344,39 @@
         }
         
         .code-block {
-            background: #2d2d30;
-            border: 1px solid #4a4a4a;
+            background: rgba(13, 13, 13, 0.95);
+            border: 1px solid rgba(74, 158, 255, 0.1);
             border-radius: 8px;
             padding: 20px;
             margin: 20px 0;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 16px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
             overflow-x: auto;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+        
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 6px;
+        }
+        
+        .code-block::before {
+            content: '● ● ●';
+            color: rgba(74, 158, 255, 0.3);
+            font-size: 10px;
+            letter-spacing: 3px;
         }
         
         .code-block code {
-            color: #4a9eff;
+            color: #60a5fa;
+            display: block;
+            margin-top: 20px;
+            line-height: 1.6;
         }
         
         .tech-stack {
@@ -308,20 +387,23 @@
         }
         
         .tech-badge {
-            background: #2d2d30;
-            border: 1px solid #4a9eff;
-            color: #4a9eff;
+            background: rgba(74, 158, 255, 0.1);
+            border: 1px solid rgba(74, 158, 255, 0.3);
+            color: #60a5fa;
             padding: 10px 20px;
             border-radius: 20px;
             font-size: 16px;
             font-weight: 500;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
         
         .tech-badge:hover {
-            background: #4a9eff;
-            color: #1a1a1a;
+            background: rgba(74, 158, 255, 0.2);
+            border-color: #4a9eff;
+            color: #ffffff;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
         }
         
         .screenshot {
@@ -335,11 +417,32 @@
         }
         
         .demo-container {
-            background: #2d2d30;
+            background: rgba(13, 13, 13, 0.8);
             border-radius: 12px;
             padding: 30px;
             margin-top: 30px;
-            border: 1px solid #4a4a4a;
+            border: 1px solid rgba(74, 158, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .demo-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #4a9eff, transparent);
+        }
+        
+        .demo-container h3 {
+            color: #60a5fa;
+            font-size: 22px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
         
         .bullet-list {
@@ -358,11 +461,11 @@
         }
         
         .bullet-list li::before {
-            content: '▸';
+            content: '—';
             position: absolute;
             left: 10px;
-            color: #4a9eff;
-            font-size: 24px;
+            color: rgba(74, 158, 255, 0.6);
+            font-size: 20px;
         }
         
         /* Animations */
@@ -405,28 +508,29 @@
         .slide.active .stats-container .stat-box:nth-child(2) { animation: fadeInUp 0.5s ease 0.5s both; }
         .slide.active .stats-container .stat-box:nth-child(3) { animation: fadeInUp 0.5s ease 0.6s both; }
         
-        /* Keyboard Hint */
         .keyboard-hint {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #2d2d30;
+            background: rgba(13, 13, 13, 0.8);
             padding: 10px 16px;
             border-radius: 8px;
-            border: 1px solid #4a4a4a;
-            color: #b0b0b0;
+            border: 1px solid rgba(74, 158, 255, 0.1);
+            color: #808080;
             font-size: 12px;
             z-index: 1000;
+            backdrop-filter: blur(10px);
         }
         
         .key {
-            background: #1a1a1a;
+            background: rgba(74, 158, 255, 0.1);
             padding: 2px 6px;
             border-radius: 4px;
-            border: 1px solid #4a4a4a;
+            border: 1px solid rgba(74, 158, 255, 0.2);
             margin: 0 2px;
-            color: #4a9eff;
+            color: #60a5fa;
             font-weight: 600;
+            font-family: 'Monaco', 'Consolas', monospace;
         }
     </style>
 </head>
@@ -462,22 +566,43 @@
             <p class="subtitle animate-in">Understanding Global Emissions Data</p>
             <div class="feature-grid animate-in">
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <line x1="9" y1="9" x2="15" y2="9" />
+                            <line x1="9" y1="15" x2="15" y2="15" />
+                        </svg>
+                    </div>
                     <h3>Complex Data</h3>
                     <p>20,000+ data points spanning 275 years across 195 countries</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                    </div>
                     <h3>Limited Tools</h3>
                     <p>Existing solutions lack real-time filtering and comparison</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                        </svg>
+                    </div>
                     <h3>Performance</h3>
                     <p>Need for smooth, responsive visualisation at 60fps</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="16" />
+                            <line x1="8" y1="12" x2="16" y2="12" />
+                        </svg>
+                    </div>
                     <h3>Accessibility</h3>
                     <p>Platform-independent solution with intuitive UI</p>
                 </div>
@@ -528,12 +653,25 @@
             </div>
             <div class="feature-grid animate-in">
                 <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="7" height="7" />
+                            <rect x="14" y="3" width="7" height="7" />
+                            <rect x="14" y="14" width="7" height="7" />
+                            <rect x="3" y="14" width="7" height="7" />
+                        </svg>
+                    </div>
                     <h3>Custom Dark Theme</h3>
                     <p>CSS-styled components with smooth animations</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" />
+                            <path d="M2 17L12 22L22 17" />
+                            <path d="M2 12L12 17L22 12" />
+                        </svg>
+                    </div>
                     <h3>Performance Optimisation</h3>
                     <p>Smart caching for statistics and filtered data</p>
                 </div>
@@ -544,19 +682,19 @@
         <div class="slide slide-content">
             <h2 class="animate-in">Key Features</h2>
             <div class="demo-container animate-in">
-                <h3>🔍 Smart Search</h3>
+                <h3>Smart Search</h3>
                 <p>Real-time country filtering with searchable dropdowns</p>
             </div>
             <div class="demo-container animate-in">
-                <h3>📊 Interactive Charts</h3>
+                <h3>Interactive Charts</h3>
                 <p>Hover tooltips, smooth animations, dual-country overlay</p>
             </div>
             <div class="demo-container animate-in">
-                <h3>📈 Live Statistics</h3>
+                <h3>Live Statistics</h3>
                 <p>Mean, median, standard deviation, and trend analysis</p>
             </div>
             <div class="demo-container animate-in">
-                <h3>💾 Export Capability</h3>
+                <h3>Export Capability</h3>
                 <p>Save charts as PNG with automatic naming</p>
             </div>
         </div>
@@ -592,22 +730,40 @@
             <h2 class="animate-in">Impact & Results</h2>
             <div class="feature-grid animate-in">
                 <div class="feature-card">
-                    <div class="feature-icon">✅</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </div>
                     <h3>Cross-Platform Success</h3>
                     <p>Windows, macOS, and Linux support with native feel</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 12L18 12L15 21L9 3L6 12L2 12" />
+                        </svg>
+                    </div>
                     <h3>User-Friendly</h3>
                     <p>No installation required - just extract and run</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📱</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="4" y="4" width="16" height="16" rx="2" />
+                            <line x1="9" y1="9" x2="15" y2="15" />
+                            <line x1="15" y1="9" x2="9" y2="15" />
+                        </svg>
+                    </div>
                     <h3>Modern UI/UX</h3>
                     <p>Professional dark theme with intuitive controls</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                        </svg>
+                    </div>
                     <h3>Educational Value</h3>
                     <p>Makes climate data accessible and understandable</p>
                 </div>
@@ -630,12 +786,12 @@
         
         <!-- Slide 9: Thank You -->
         <div class="slide slide-title">
-            <h1 class="animate-in">Thank You!</h1>
-            <p class="subtitle animate-in">Find out more below</p>
+            <h1 class="animate-in">Thank You</h1>
+            <p class="subtitle animate-in">Questions & Discussion</p>
             <div class="tech-stack animate-in">
-                <span class="tech-badge">github.com/UnoLUL/CompsciProjectEnviro</span>
-                <span class="tech-badge">Standalone Download</span>
-                <span class="tech-badge">Open Source code available</span>
+                <span class="tech-badge">GitHub: /climate-visualiser</span>
+                <span class="tech-badge">Download Available</span>
+                <span class="tech-badge">Open Source</span>
             </div>
         </div>
         
