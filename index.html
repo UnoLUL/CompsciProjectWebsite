@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Climate Data Visualizer - Presentation</title>
+    <title>Climate Data Visualiser - Presentation</title>
     <style>
         * {
             margin: 0;
@@ -32,24 +32,26 @@
             position: absolute;
             top: 0;
             left: 0;
-            display: none;
+            display: flex;
             background: #1a1a1a;
             padding: 60px 80px;
+            visibility: hidden;
             opacity: 0;
-            transform: translateX(100px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(30px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
         }
         
         .slide.active {
-            display: flex;
+            visibility: visible;
             opacity: 1;
             transform: translateX(0);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s;
         }
         
         .slide.prev {
-            display: flex;
+            visibility: hidden;
             opacity: 0;
-            transform: translateX(-100px);
+            transform: translateX(-30px);
         }
         
         /* Navigation */
@@ -143,7 +145,12 @@
             align-items: center;
         }
         
-        /* Fonts and stuff */
+        /* Fix for initial slide visibility */
+        .slide:not(.active):not(.prev) {
+            pointer-events: none;
+        }
+        
+        /* Typography */
         h1 {
             font-size: 72px;
             font-weight: 700;
@@ -205,6 +212,8 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
         }
         
         .feature-card::before {
@@ -254,6 +263,8 @@
             border-radius: 12px;
             padding: 24px;
             text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
         }
         
         .stat-number {
@@ -352,24 +363,43 @@
         
         /* Animations */
         @keyframes fadeInUp {
-            from {
+            0% {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
-            to {
+            100% {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
         
-        .slide.active .animate-in {
-            animation: fadeInUp 0.8s ease forwards;
+        .animate-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation-fill-mode: both;
         }
         
-        .slide.active .animate-in:nth-child(1) { animation-delay: 0.1s; }
-        .slide.active .animate-in:nth-child(2) { animation-delay: 0.2s; }
-        .slide.active .animate-in:nth-child(3) { animation-delay: 0.3s; }
-        .slide.active .animate-in:nth-child(4) { animation-delay: 0.4s; }
+        .slide.active .animate-in {
+            animation: fadeInUp 0.5s ease;
+            animation-fill-mode: both;
+        }
+        
+        .slide.active .animate-in:nth-child(1) { animation-delay: 0.2s; }
+        .slide.active .animate-in:nth-child(2) { animation-delay: 0.3s; }
+        .slide.active .animate-in:nth-child(3) { animation-delay: 0.4s; }
+        .slide.active .animate-in:nth-child(4) { animation-delay: 0.5s; }
+        .slide.active .animate-in:nth-child(5) { animation-delay: 0.6s; }
+        .slide.active .animate-in:nth-child(6) { animation-delay: 0.7s; }
+        
+        /* Special handling for grid items */
+        .slide.active .feature-grid .feature-card:nth-child(1) { animation: fadeInUp 0.5s ease 0.4s both; }
+        .slide.active .feature-grid .feature-card:nth-child(2) { animation: fadeInUp 0.5s ease 0.5s both; }
+        .slide.active .feature-grid .feature-card:nth-child(3) { animation: fadeInUp 0.5s ease 0.6s both; }
+        .slide.active .feature-grid .feature-card:nth-child(4) { animation: fadeInUp 0.5s ease 0.7s both; }
+        
+        .slide.active .stats-container .stat-box:nth-child(1) { animation: fadeInUp 0.5s ease 0.4s both; }
+        .slide.active .stats-container .stat-box:nth-child(2) { animation: fadeInUp 0.5s ease 0.5s both; }
+        .slide.active .stats-container .stat-box:nth-child(3) { animation: fadeInUp 0.5s ease 0.6s both; }
         
         /* Keyboard Hint */
         .keyboard-hint {
@@ -411,12 +441,12 @@
     <div class="presentation">
         
         <!-- Slide 1: Title -->
-        <div class="slide slide-title active">
-            <h1 class="animate-in">Climate Data Visualizer</h1>
+        <div class="slide slide-title">
+            <h1 class="animate-in">Climate Data Visualiser</h1>
             <p class="subtitle animate-in">Interactive CO₂ Emissions Analysis Platform</p>
             <div class="tech-stack animate-in">
                 <span class="tech-badge">JavaFX</span>
-                <span class="tech-badge">Data Visualization</span>
+                <span class="tech-badge">Data Visualisation</span>
                 <span class="tech-badge">Real-time Analytics</span>
                 <span class="tech-badge">Cross-platform</span>
             </div>
@@ -440,7 +470,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
                     <h3>Performance</h3>
-                    <p>Need for smooth, responsive visualization at 60fps</p>
+                    <p>Need for smooth, responsive visualisation at 60fps</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎯</div>
@@ -453,7 +483,7 @@
         <!-- Slide 3: Solution Overview -->
         <div class="slide slide-content">
             <h2 class="animate-in">The Solution</h2>
-            <p class="subtitle animate-in">A Modern, Efficient Data Visualization Tool</p>
+            <p class="subtitle animate-in">A Modern, Efficient Data Visualisation Tool</p>
             <ul class="bullet-list animate-in">
                 <li>Real-time data processing with intelligent caching</li>
                 <li>Interactive dual-country comparison system</li>
@@ -477,7 +507,7 @@
             </div>
         </div>
         
-        <!-- Slide 4: Technical Architecture -->
+                    <!-- Slide 4: Technical Architecture -->
         <div class="slide slide-content">
             <h2 class="animate-in">Technical Architecture</h2>
             <p class="subtitle animate-in">Clean, Modular Design</p>
@@ -489,7 +519,7 @@
 └── DataAnalyser.java   // Statistical computations<br>
 <br>
 /ui<br>
-└── MainApp.java        // JavaFX UI & visualization logic
+└── MainApp.java        // JavaFX UI & visualisation logic
                 </code>
             </div>
             <div class="feature-grid animate-in">
@@ -500,7 +530,7 @@
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3>Performance Optimization</h3>
+                    <h3>Performance Optimisation</h3>
                     <p>Smart caching for statistics and filtered data</p>
                 </div>
             </div>
@@ -530,7 +560,7 @@
         <!-- Slide 6: Performance -->
         <div class="slide slide-content">
             <h2 class="animate-in">Performance Metrics</h2>
-            <p class="subtitle animate-in">Optimized for Large Datasets</p>
+            <p class="subtitle animate-in">Optimised for Large Datasets</p>
             <div class="stats-container animate-in">
                 <div class="stat-box">
                     <div class="stat-number">&lt;2s</div>
@@ -548,7 +578,7 @@
             <ul class="bullet-list animate-in">
                 <li>Async data loading with progress feedback</li>
                 <li>HashMap-based caching for repeated calculations</li>
-                <li>Optimized stream operations for data filtering</li>
+                <li>Optimised stream operations for data filtering</li>
                 <li>Smooth 60fps animations with JavaFX transitions</li>
             </ul>
         </div>
@@ -599,7 +629,7 @@
             <h1 class="animate-in">Thank You</h1>
             <p class="subtitle animate-in">Questions & Discussion</p>
             <div class="tech-stack animate-in">
-                <span class="tech-badge">GitHub: /climate-visualizer</span>
+                <span class="tech-badge">GitHub: /climate-visualiser</span>
                 <span class="tech-badge">Download Available</span>
                 <span class="tech-badge">Open Source</span>
             </div>
@@ -619,26 +649,39 @@
     </div>
     
     <script>
-        let currentSlideIndex = 0;
+        let currentSlideIndex = -1;
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
         
         document.getElementById('totalSlides').textContent = totalSlides;
         
         function showSlide(index) {
-            // Remove all active and prev classes
+            // Clear all animations first
             slides.forEach(slide => {
                 slide.classList.remove('active', 'prev');
+                // Reset animations on all animate-in elements
+                slide.querySelectorAll('.animate-in').forEach(el => {
+                    el.style.animation = 'none';
+                });
             });
             
-            // Set previous slide
-            if (currentSlideIndex >= 0 && currentSlideIndex < totalSlides) {
+            // Set previous slide (for exit animation)
+            if (currentSlideIndex >= 0 && currentSlideIndex < totalSlides && slides[currentSlideIndex]) {
                 slides[currentSlideIndex].classList.add('prev');
             }
             
-            // Set new active slide
+            // Update to new slide index
             currentSlideIndex = index;
-            slides[currentSlideIndex].classList.add('active');
+            
+            // Apply active class with proper timing
+            requestAnimationFrame(() => {
+                slides[currentSlideIndex].classList.add('active');
+                
+                // Reapply animations to new slide's elements
+                slides[currentSlideIndex].querySelectorAll('.animate-in').forEach(el => {
+                    el.style.animation = '';
+                });
+            });
             
             // Update counter
             document.getElementById('currentSlide').textContent = currentSlideIndex + 1;
@@ -648,8 +691,10 @@
             document.getElementById('progressBar').style.width = progress + '%';
             
             // Update navigation buttons
-            document.querySelector('.nav-btn').disabled = currentSlideIndex === 0;
-            document.querySelectorAll('.nav-btn')[1].disabled = currentSlideIndex === totalSlides - 1;
+            const prevBtn = document.querySelectorAll('.nav-btn')[0];
+            const nextBtn = document.querySelectorAll('.nav-btn')[1];
+            if (prevBtn) prevBtn.disabled = index === 0;
+            if (nextBtn) nextBtn.disabled = index === totalSlides - 1;
         }
         
         function nextSlide() {
@@ -703,8 +748,13 @@
             }
         }
         
-        // Initialize
-        showSlide(0);
+        // Initialize - with proper delay for first slide
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial state
+            currentSlideIndex = -1;
+            // Show first slide with proper animation
+            requestAnimationFrame(() => showSlide(0));
+        });
     </script>
 </body>
 </html>
